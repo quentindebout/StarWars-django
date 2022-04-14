@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script type="text/javascript">
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        let group = urlParams.get('group');
+        if(group == null) {
+                group = ""
+            }
+    </script>
+    {% for head in button_header %}
+        <button id="myButton{{ head }}">{{ head }}</button>
+        <script type="text/javascript">
+            document.getElementById("myButton{{ head }}").onclick = function () {
+                if(!group.includes("{{ head }}")) {
+                    location.href = "?group="+ group + "{{ head }}" + ",";
+                }
+                else {
+                    location.href = "?group="+ group.replace("{{ head }},", "");
+                }
+            };
+        </script>
+    {% endfor %}
+    <table style="border: 1px solid white;border-collapse: collapse;">
+        <tr>
+            {% for head in header %}
+                <th>{{ head }}</th>
+            {% endfor %}
+        </tr>
+        {% for people in object.csv %}
+        <tr>
+            {% for attribute in people %}
+           <td style="border: 1px solid white;border-collapse: collapse;background-color: #CECECE;">{{ attribute }}</td>
+            {% endfor %}
+        {% endfor %}
+        </tr>
+    </table>
+
+    <button id="myButton" class="float-left submit-button" >Load more</button>
+    <script type="text/javascript">
+        let nb = parseInt(urlParams.get('nb'));
+        if(isNaN(nb)) {
+            nb=10;
+        }
+        nb = nb + 10;
+        document.getElementById("myButton").onclick = function () {
+            location.href = "?nb="+nb;
+        };
+    </script>
+</body>
+</html>
